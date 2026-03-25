@@ -33,28 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return /^[a-zA-Z]+$/.test(text);
     };
 
-    // Auto-suggestions logic
-    wordInput.addEventListener('input', (e) => {
-        const value = e.target.value.toLowerCase().trim();
+    const showSuggestions = (filteredWords, matchLen = 0) => {
         suggestionsContainer.innerHTML = '';
-
-        if (value.length === 0 || !validateInput(value)) {
-            suggestionsContainer.classList.add('hidden');
-            return;
-        }
-
-        const filteredWords = dictionary.filter(word => 
-            word.startsWith(value) && word !== value
-        ).slice(0, 5); // Max 5 suggestions
-
         if (filteredWords.length > 0) {
             filteredWords.forEach(word => {
                 const li = document.createElement('li');
                 li.className = 'suggestion-item';
-                // Highlight matching part
-                const matchPart = word.substring(0, value.length);
-                const restPart = word.substring(value.length);
-                li.innerHTML = `<span style="color: #4facfe; font-weight: bold;">${matchPart}</span>${restPart}`;
+                
+                if (matchLen > 0) {
+                    const matchPart = word.substring(0, matchLen);
+                    const restPart = word.substring(matchLen);
+                    li.innerHTML = `<span style="color: #4facfe; font-weight: bold;">${matchPart}</span>${restPart}`;
+                } else {
+                    li.textContent = word;
+                }
                 
                 li.addEventListener('click', () => {
                     wordInput.value = word;
@@ -68,6 +60,36 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             suggestionsContainer.classList.add('hidden');
         }
+    };
+
+    // Show initial suggestions on focus
+    wordInput.addEventListener('focus', () => {
+        const value = wordInput.value.trim();
+        if (value.length === 0) {
+            // Pick a few default cool words
+            showSuggestions(['AlphaSum', 'Developer', 'Javascript', 'Beautiful', 'Premium']);
+        }
+    });
+
+    // Auto-suggestions logic on typing
+    wordInput.addEventListener('input', (e) => {
+        const value = e.target.value.toLowerCase().trim();
+
+        if (value.length === 0) {
+            showSuggestions(['AlphaSum', 'Developer', 'Javascript', 'Beautiful', 'Premium']);
+            return;
+        }
+
+        if (!validateInput(value)) {
+            suggestionsContainer.classList.add('hidden');
+            return;
+        }
+
+        const filteredWords = dictionary.filter(word => 
+            word.startsWith(value) && word !== value
+        ).slice(0, 5); // Max 5 suggestions
+
+        showSuggestions(filteredWords, value.length);
     });
 
     // Hide suggestions when clicking outside
