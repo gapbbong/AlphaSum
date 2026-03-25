@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaSum - Word Score Calculator</title>
+    <meta name="description" content="Calculate the score of your words where a=1, b=2 ... z=26">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1 class="title">Alpha<span class="highlight">Sum</span></h1>
+            <p class="subtitle">Discover the numerical value of your words.</p>
+        </header>
+
+        <div class="glass-panel">
+            <div class="input-group">
+                <input type="text" id="wordInput" placeholder="Enter a word..." autocomplete="off" autofocus>
+                <button id="calculateBtn" class="btn-primary">Calculate</button>
+            </div>
+            <div class="error-message" id="errorMessage">Please enter English letters only.</div>
+        </div>
+
+        <div class="result-container hidden" id="resultContainer">
+            <div class="calculation-steps" id="calculationSteps">
+                <!-- Steps will be injected here -->
+            </div>
+            <div class="final-score-box">
+                <div class="score-label">Total Score</div>
+                <div class="final-score" id="finalScore">0</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
