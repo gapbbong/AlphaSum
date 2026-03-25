@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
         "experience", "user", "interactive", "dynamic", "responsive"
     ];
 
-    // Letter to number mapping
     const getLetterScore = (char) => {
         const code = char.toLowerCase().charCodeAt(0);
         if (code >= 97 && code <= 122) { // a-z
@@ -32,6 +31,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // Allow only alphabets (both upper and lower)
         return /^[a-zA-Z]+$/.test(text);
     };
+
+    // Initialize Recommendation Buttons
+    const recommendationButtons = document.getElementById('recommendationButtons');
+    const recommendedWords = ['Alpha', 'Sum', 'Developer', 'Premium', 'Galaxy'];
+    
+    recommendedWords.forEach(word => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-recommend';
+        btn.textContent = word;
+        btn.addEventListener('click', () => {
+            wordInput.value = word;
+            suggestionsContainer.classList.add('hidden'); // hide dropdown if open
+            calculateBtn.click(); // trigger calculation
+        });
+        recommendationButtons.appendChild(btn);
+    });
 
     const showSuggestions = (filteredWords, matchLen = 0) => {
         suggestionsContainer.innerHTML = '';
