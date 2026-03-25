@@ -32,21 +32,37 @@ document.addEventListener('DOMContentLoaded', () => {
         return /^[a-zA-Z]+$/.test(text);
     };
 
-    // Initialize Recommendation Buttons
     const recommendationButtons = document.getElementById('recommendationButtons');
-    const recommendedWords = ['Alpha', 'Sum', 'Developer', 'Premium', 'Galaxy'];
-    
-    recommendedWords.forEach(word => {
-        const btn = document.createElement('button');
-        btn.className = 'btn-recommend';
-        btn.textContent = word;
-        btn.addEventListener('click', () => {
-            wordInput.value = word;
-            suggestionsContainer.classList.add('hidden'); // hide dropdown if open
-            calculateBtn.click(); // trigger calculation
+
+    const generateRelatedButtons = (inputWord) => {
+        recommendationButtons.innerHTML = ''; // clear old
+        const lowerInput = inputWord.toLowerCase();
+
+        // Find related words (start with same letter)
+        let related = dictionary.filter(w => w !== lowerInput && w[0] === lowerInput[0]);
+        
+        // If not enough related words, pad with random ones
+        if (related.length < 3) {
+             const others = dictionary.filter(w => w !== lowerInput && w[0] !== lowerInput[0]);
+             const randomPadding = others.sort(() => 0.5 - Math.random()).slice(0, 4 - related.length);
+             related = related.concat(randomPadding);
+        } else {
+             // Shuffle related words and pick 4
+             related = related.sort(() => 0.5 - Math.random()).slice(0, 4);
+        }
+
+        related.forEach(word => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-recommend';
+            btn.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+            btn.addEventListener('click', () => {
+                wordInput.value = word.charAt(0).toUpperCase() + word.slice(1);
+                suggestionsContainer.classList.add('hidden'); // hide dropdown if open
+                calculateScore(); // trigger calculation directly
+            });
+            recommendationButtons.appendChild(btn);
         });
-        recommendationButtons.appendChild(btn);
-    });
+    };
 
     const showSuggestions = (filteredWords, matchLen = 0) => {
         suggestionsContainer.innerHTML = '';
@@ -137,6 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
         calculationSteps.innerHTML = '';
         finalScore.textContent = '0';
         resultContainer.classList.remove('hidden');
+
+        // Generate related buttons dynamically
+        generateRelatedButtons(word);
 
         let total = 0;
         const letters = word.split('');
