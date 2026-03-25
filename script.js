@@ -5,6 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultContainer = document.getElementById('resultContainer');
     const calculationSteps = document.getElementById('calculationSteps');
     const finalScore = document.getElementById('finalScore');
+    const suggestionsContainer = document.getElementById('suggestionsContainer');
+
+    // Dictionary for recommendations
+    const dictionary = [
+        "alpha", "sum", "hello", "world", "javascript", "html", "css",
+        "beautiful", "design", "glassmorphism", "premium", "coding",
+        "developer", "frontend", "backend", "application", "keyboard",
+        "mountain", "ocean", "galaxy", "universe", "apple", "banana",
+        "cherry", "grape", "orange"
+    ];
 
     // Letter to number mapping
     const getLetterScore = (char) => {
@@ -19,6 +29,50 @@ document.addEventListener('DOMContentLoaded', () => {
         // Allow only alphabets (both upper and lower)
         return /^[a-zA-Z]+$/.test(text);
     };
+
+    // Auto-suggestions logic
+    wordInput.addEventListener('input', (e) => {
+        const value = e.target.value.toLowerCase().trim();
+        suggestionsContainer.innerHTML = '';
+
+        if (value.length === 0 || !validateInput(value)) {
+            suggestionsContainer.classList.add('hidden');
+            return;
+        }
+
+        const filteredWords = dictionary.filter(word => 
+            word.startsWith(value) && word !== value
+        ).slice(0, 5); // Max 5 suggestions
+
+        if (filteredWords.length > 0) {
+            filteredWords.forEach(word => {
+                const li = document.createElement('li');
+                li.className = 'suggestion-item';
+                // Highlight matching part
+                const matchPart = word.substring(0, value.length);
+                const restPart = word.substring(value.length);
+                li.innerHTML = `<span style="color: #4facfe; font-weight: bold;">${matchPart}</span>${restPart}`;
+                
+                li.addEventListener('click', () => {
+                    wordInput.value = word;
+                    suggestionsContainer.classList.add('hidden');
+                    calculateScore();
+                });
+                
+                suggestionsContainer.appendChild(li);
+            });
+            suggestionsContainer.classList.remove('hidden');
+        } else {
+            suggestionsContainer.classList.add('hidden');
+        }
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+        if (e.target !== wordInput && e.target !== suggestionsContainer) {
+            suggestionsContainer.classList.add('hidden');
+        }
+    });
 
     const calculateScore = () => {
         const word = wordInput.value.trim();
