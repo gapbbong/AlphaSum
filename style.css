@@ -124,6 +124,7 @@ header {
     border-radius: 24px;
     padding: 2rem;
     box-shadow: var(--shadow-glass);
+    position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -207,12 +208,17 @@ input::placeholder {
     padding: 0;
     max-height: 150px;
     overflow-y: auto;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
     border-radius: 12px;
     border: 1px solid var(--border-glass);
     transition: all 0.3s ease;
     opacity: 1;
     transform: translateY(0);
+    position: absolute;
+    width: calc(100% - 4rem);
+    left: 2rem;
+    z-index: 100;
 }
 
 .suggestions-container.hidden {

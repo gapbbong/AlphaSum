@@ -7,13 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalScore = document.getElementById('finalScore');
     const suggestionsContainer = document.getElementById('suggestionsContainer');
 
-    // Dictionary for recommendations
+    // Expanded Dictionary for recommendations
     const dictionary = [
         "alpha", "sum", "hello", "world", "javascript", "html", "css",
         "beautiful", "design", "glassmorphism", "premium", "coding",
         "developer", "frontend", "backend", "application", "keyboard",
         "mountain", "ocean", "galaxy", "universe", "apple", "banana",
-        "cherry", "grape", "orange"
+        "cherry", "grape", "orange", "computer", "science", "software",
+        "engineering", "internet", "website", "browser", "network",
+        "data", "algorithm", "python", "react", "node", "interface",
+        "experience", "user", "interactive", "dynamic", "responsive"
     ];
 
     // Letter to number mapping
@@ -69,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hide suggestions when clicking outside
     document.addEventListener('click', (e) => {
-        if (e.target !== wordInput && e.target !== suggestionsContainer) {
+        if (e.target !== wordInput && !suggestionsContainer.contains(e.target)) {
             suggestionsContainer.classList.add('hidden');
         }
     });
