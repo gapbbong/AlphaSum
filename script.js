@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // If not enough related words, pad with random ones
         if (related.length < 3) {
              const others = dictionary.filter(w => w !== lowerInput && w[0] !== lowerInput[0]);
-             const randomPadding = others.sort(() => 0.5 - Math.random()).slice(0, 4 - related.length);
+             const randomPadding = others.sort(() => 0.5 - Math.random()).slice(0, 3 - related.length);
              related = related.concat(randomPadding);
         } else {
-             // Shuffle related words and pick 4
-             related = related.sort(() => 0.5 - Math.random()).slice(0, 4);
+             // Shuffle related words and pick 3
+             related = related.sort(() => 0.5 - Math.random()).slice(0, 3);
         }
 
         related.forEach(word => {
